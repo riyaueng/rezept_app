@@ -1,5 +1,21 @@
-import React from "react"
+import "./Footer.css"
 
 export default function Footer() {
-  return <div>Footer</div>
+  return (
+    <footer>
+      <div>
+        <img src="#" alt="" />
+      </div>
+
+      <div>
+        <p>Social Media</p>
+
+        <div>
+          <img src="#" alt="" />
+          <img src="#" alt="" />
+          <img src="#" alt="" />
+        </div>
+      </div>
+    </footer>
+  )
 }
