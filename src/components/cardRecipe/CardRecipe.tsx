@@ -1,19 +1,19 @@
-import Button from "../button/Button"
+import { Link } from "react-router"
 import "./CardRecipe"
 
 interface CardRecipeProps {
   name: string
   desc: string
   link: string
-  onClick: () => void | Promise<void>
+  // onClick: () => void | Promise<void>
 }
 
-export default function CardRecipe({ name, desc, link, onClick }: CardRecipeProps) {
+export default function CardRecipe({ name, desc, link }: CardRecipeProps) {
   return (
     <div>
       <h3>{name}</h3>
       <p>{desc}</p>
-      <Button text="Zum Rezept" link={link} onClick={onClick} />
+      <Link to={link}>Zum Rezept</Link>
     </div>
   )
 }

@@ -7,6 +7,7 @@ import About from "./pages/about/About"
 import Login from "./pages/login/Login"
 import Details from "./pages/details/Details"
 import Category from "./pages/category/Category"
+import Favorites from "./pages/favorites/Favorites"
 
 function App() {
   const router = createBrowserRouter(
@@ -17,6 +18,7 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="kategorie/:category" element={<Category />} />
         <Route path="rezept/:id" element={<Details />} />
+        <Route path="favoriten" element={<Favorites />} />
         <Route path="login" element={<Login />} />
       </Route>
     )

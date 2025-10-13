@@ -12,7 +12,9 @@ export default function ListRecipe() {
       {recipes.map((recipe: IRecipe) => {
         return (
           <>
-            <CardRecipe name={recipe.name} desc={recipe.description} link={`rezept/${recipe.id}`} onClick={""} />
+            <div key={recipe.id}>
+              <CardRecipe name={recipe.name} desc={recipe.description} link={`rezept/${recipe.id}`} />
+            </div>
           </>
         )
       })}
