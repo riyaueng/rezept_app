@@ -23,7 +23,6 @@ export async function getRecipeCategoryList(id: string): Promise<IRecipe[]> {
   if (error) {
     console.error(error)
   }
-  console.log(recipes)
   return recipes as unknown as IRecipe[]
 }
 
@@ -31,21 +30,27 @@ export async function getRecipeCategoryList(id: string): Promise<IRecipe[]> {
 
 export async function getCategories(): Promise<ICategory[]> {
   const { data: categories, error } = await supabase.from("categories").select(`
+    id,
     name,
     recipe:recipes(name)
     `)
   if (error) {
     console.error(error)
   }
-  console.log(categories)
   return categories as unknown as ICategory[]
+}
+
+// ? --------- Kategoriename  anzeigen lassen ---------
+
+export async function getCategoryName(categories: ICategory[], categoryId: string | undefined): Promise<string> {
+  const category = categories.find((category) => category.id === categoryId)
+  return category ? category.name : ""
 }
 
 // ? ----------- Rezept-Details anzeigen lassen ------------
 
 export async function getRecipeDetails(id: string): Promise<IRecipe[] | null> {
   const { data: details } = await supabase.from("recipes").select("*").eq("id", id)
-  console.log(details)
   return details
 }
 
@@ -53,7 +58,6 @@ export async function getRecipeDetails(id: string): Promise<IRecipe[] | null> {
 
 export async function getIngredients(id: string): Promise<IIngredient[] | null> {
   const { data: ingredients } = await supabase.from("ingredients").select("*").eq("recipe_id", id)
-  console.log(ingredients)
   return ingredients
 }
 

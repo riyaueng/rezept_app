@@ -1,22 +1,25 @@
 import { useParams } from "react-router"
 import NavCategories from "../../components/navCategories/NavCategories"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { mainContext, type mainContextProps } from "../../context/MainProvider"
-import { getRecipeCategoryList } from "../../functions/functions"
+import { getCategoryName, getRecipeCategoryList } from "../../functions/functions"
 import type { IRecipe } from "../../interfaces/IRecipe"
 import CardRecipe from "../../components/cardRecipe/CardRecipe"
 
 export default function Category() {
   const { category } = useParams<{ category: string }>()
-  const { recipes, setRecipes } = useContext(mainContext) as mainContextProps
+  const { recipes, setRecipes, categories } = useContext(mainContext) as mainContextProps
+  const [categoryName, setCategoryName] = useState<string>("")
 
   // ? ------ Rezepte unter den Kategorien rendern ------
-
+  console.log(category)
   useEffect(() => {
     if (!category) return
     ;(async () => {
       const recipe = (await getRecipeCategoryList(category)) as IRecipe[]
       setRecipes(recipe)
+      const categoryNameFunc = await getCategoryName(categories, category)
+      setCategoryName(categoryNameFunc)
     })()
   }, [category])
 
@@ -25,7 +28,7 @@ export default function Category() {
   return (
     <>
       <section className="section_categories">
-        <h2>{category}</h2>
+        <h2>{categoryName}</h2>
         <NavCategories />
       </section>
 

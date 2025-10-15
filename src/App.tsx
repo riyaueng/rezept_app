@@ -8,6 +8,9 @@ import Login from "./pages/login/Login"
 import Details from "./pages/details/Details"
 import Category from "./pages/category/Category"
 import Favorites from "./pages/favorites/Favorites"
+import Profile from "./pages/profile/Profile"
+import SignUp from "./pages/signUp/SignUp"
+import ProtectedRoute from "./components/protectedRoute/ProtectedRoute"
 
 function App() {
   const router = createBrowserRouter(
@@ -15,11 +18,28 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="rezepte" element={<Rezepte />} />
-        <Route path="about" element={<About />} />
-        <Route path="kategorie/:category" element={<Category />} />
         <Route path="rezepte/:id" element={<Details />} />
-        <Route path="favoriten" element={<Favorites />} />
+        <Route path="about" element={<About />} />
+        <Route path="/kategorie/:category" element={<Category />} />
+        <Route
+          path="favoriten"
+          element={
+            <ProtectedRoute>
+              <Favorites />
+            </ProtectedRoute>
+          }
+        />
         <Route path="login" element={<Login />} />
+        <Route path="signup" element={<SignUp />} />
+
+        <Route
+          path="profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     )
   )
