@@ -11,11 +11,9 @@ export default function ListRecipe() {
     <>
       {recipes.map((recipe: IRecipe) => {
         return (
-          <>
-            <div key={recipe.id}>
-              <CardRecipe name={recipe.name} desc={recipe.description} link={`rezept/${recipe.id}`} />
-            </div>
-          </>
+          <div key={recipe.id}>
+            <CardRecipe name={recipe.name} desc={`${recipe.description}`} link={`${recipe.id}`} />
+          </div>
         )
       })}
     </>

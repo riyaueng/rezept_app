@@ -1,4 +1,4 @@
-import { Link } from "react-router"
+import { Link, useLocation } from "react-router"
 import "./CardRecipe"
 
 interface CardRecipeProps {
@@ -9,11 +9,13 @@ interface CardRecipeProps {
 }
 
 export default function CardRecipe({ name, desc, link }: CardRecipeProps) {
+  const location = useLocation()
+
   return (
     <div>
       <h3>{name}</h3>
       <p>{desc}</p>
-      <Link to={link}>Zum Rezept</Link>
+      <Link to={location.pathname === "/rezepte" ? link : `rezepte/${link}`}>Zum Rezept</Link>
     </div>
   )
 }

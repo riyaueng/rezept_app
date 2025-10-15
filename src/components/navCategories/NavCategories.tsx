@@ -11,7 +11,7 @@ export default function NavCategories() {
       {categories.map((category: ICategory, index: number) => {
         return (
           <div key={index}>
-            <CardCategories text={category.name} image="#" />
+            <CardCategories text={category.name} image="#" link={`kategorie/${category.name}`} />
           </div>
         )
       })}

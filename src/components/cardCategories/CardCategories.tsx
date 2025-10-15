@@ -1,13 +1,16 @@
+import { Link } from "react-router"
+
 interface CardCategoryProps {
   text: string
   image: string
+  link: string
 }
 
-export default function CardCategories({ text, image }: CardCategoryProps) {
+export default function CardCategories({ text, image, link }: CardCategoryProps) {
   return (
-    <div>
+    <Link to={link}>
       <img src={image} alt="" />
       {text}
-    </div>
+    </Link>
   )
 }

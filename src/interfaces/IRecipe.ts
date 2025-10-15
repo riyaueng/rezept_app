@@ -3,6 +3,6 @@ export interface IRecipe {
   name: string
   description: string
   servings?: number
-  instructions?: string
+  instructions: string
   category_id?: string
 }

@@ -4,11 +4,16 @@ import type { ICategory } from "../interfaces/ICategory"
 // import type { IIngredient } from "../interfaces/IIngredient"
 import { getCategories, getRecipeAndCategory } from "../functions/functions.ts"
 import type { IFavorites } from "../interfaces/IFavorites.ts"
+import type { IIngredient } from "../interfaces/IIngredient.ts"
 
 export interface mainContextProps {
   recipes: IRecipe[]
   categories: ICategory[]
+  ingredients: IIngredient[]
   favorites: IFavorites[] | null
+  setRecipes: React.Dispatch<React.SetStateAction<IRecipe[]>>
+  setIngredients: React.Dispatch<React.SetStateAction<IIngredient[]>>
+  setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>
   setFavorites: React.Dispatch<React.SetStateAction<IFavorites[] | null>>
   // ingredients: IIngredient[]
 }
@@ -20,12 +25,10 @@ export default function MainProvider({ children }: { children: React.ReactNode }
   const [recipes, setRecipes] = useState<IRecipe[]>([])
   const [categories, setCategories] = useState<ICategory[]>([])
   const [favorites, setFavorites] = useState<IFavorites[] | null>([])
-  // const [ingredients, setIngredients] = useState<IIngredient[]>([])
+  const [ingredients, setIngredients] = useState<IIngredient[]>([])
 
   useEffect(() => {
     async function getData() {
-      // const recipes_function = await getRecipes()
-      // setRecipes(recipes_function)
       const recipe_category = await getRecipeAndCategory()
       const categories_function = await getCategories()
       // await getFavorites()
@@ -39,6 +42,10 @@ export default function MainProvider({ children }: { children: React.ReactNode }
     recipes,
     categories,
     favorites,
+    ingredients,
+    setRecipes,
+    setCategories,
+    setIngredients,
     setFavorites,
   }
 

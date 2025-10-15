@@ -17,7 +17,7 @@ function App() {
         <Route path="rezepte" element={<Rezepte />} />
         <Route path="about" element={<About />} />
         <Route path="kategorie/:category" element={<Category />} />
-        <Route path="rezept/:id" element={<Details />} />
+        <Route path="rezepte/:id" element={<Details />} />
         <Route path="favoriten" element={<Favorites />} />
         <Route path="login" element={<Login />} />
       </Route>
