@@ -12,7 +12,7 @@ export default function ListRecipe() {
       {recipes.map((recipe: IRecipe) => {
         return (
           <div key={recipe.id}>
-            <CardRecipe name={recipe.name} desc={`${recipe.description}`} link={`${recipe.id}`} />
+            <CardRecipe name={recipe.name} desc={`${recipe.description}`} link={`${recipe.id}`} recipe={recipe} />
           </div>
         )
       })}

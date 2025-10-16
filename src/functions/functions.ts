@@ -1,4 +1,5 @@
 import type { ICategory } from "../interfaces/ICategory"
+import type { IFavorites } from "../interfaces/IFavorite"
 import type { IIngredient } from "../interfaces/IIngredient"
 // import type { IFavorites } from "../interfaces/IFavorites"
 import type { IRecipe } from "../interfaces/IRecipe"
@@ -61,19 +62,16 @@ export async function getIngredients(id: string): Promise<IIngredient[] | null> 
   return ingredients
 }
 
-// ? --------- Favoriten als Liste ---------
-// export const getFavorites = async (): Promise<IFavorites[] | unknown> => {
-//   const { data: favorites } = await supabase.from("favorites").select("*")
-//   // .eq("recipe_id", recipes.id)
-//   console.log(favorites)
+// ? --------- Favoriten als Liste anzeigen lassen ---------
 
-//   return favorites
-// }
+export const getFavorites = async (userId: string | undefined): Promise<IFavorites[] | unknown> => {
+  const { data: favorites } = await supabase.from("favorites").select("id").eq("profile_id", userId).single()
 
-// export async function addFavorites(recipeId: number) {
-//   const { data: recipeExits, error: ErrorRecipe } = await supabase
-//     .from("favorites")
-//     .select("*")
-//     .eq("favorite_id", recipeId)
-//     .eq("recipe_id", recipeId)
-// }
+  const { data: favRecipes } = await supabase
+    .from("favorite_recipes")
+    .select("id, recipes:recipe_id(*)")
+    .eq("favorites_id", favorites?.id)
+  console.log(favRecipes)
+
+  return favRecipes
+}

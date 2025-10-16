@@ -4,7 +4,7 @@ import "./Button.css"
 interface ButtonProps {
   text: string
   link: string
-  onClick: () => void | Promise<void>
+  onClick?: () => void | Promise<void>
 }
 export default function Button(props: ButtonProps) {
   return (
