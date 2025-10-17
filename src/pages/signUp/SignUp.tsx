@@ -55,7 +55,7 @@ export default function SignUp() {
         quidem voluptate voluptatum porro?
       </p>
 
-      <form onSubmit={handleSignUp} className="space-y-4">
+      <form onSubmit={handleSignUp} className="">
         <div>
           <input type="text" name="firstname" placeholder="Vorname" required className="" />
         </div>

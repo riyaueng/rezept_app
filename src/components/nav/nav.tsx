@@ -1,5 +1,4 @@
 import { NavLink, useNavigate } from "react-router"
-import "./nav.css"
 import { useContext } from "react"
 import { mainContext, type mainContextProps } from "../../context/MainProvider"
 import supabase from "../../utils/supabase"

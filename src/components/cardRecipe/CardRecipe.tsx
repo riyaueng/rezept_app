@@ -45,7 +45,9 @@ export default function CardRecipe(props: CardRecipeProps) {
 
   return (
     <div className="card">
-      <img src={props.recipe.img_url} alt={props.name} />
+      <div className="w-70 h-60 flex items-center justify-center overflow-hidden relative">
+        <img src={props.recipe.img_url} alt={props.name} className="w-full h-full object-cover" />
+      </div>
       <h3>{props.name}</h3>
       <p>{props.category}</p>
       <p>{props.desc}</p>

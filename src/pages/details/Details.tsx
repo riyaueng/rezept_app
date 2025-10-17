@@ -35,7 +35,9 @@ export default function Details() {
 
   return (
     <section className="section_details">
-      <img src={recipeDetails.img_url} alt={recipeDetails.name} />
+      <div className="w-[70%] h-100 flex items-center justify-center overflow-hidden relative">
+        <img src={recipeDetails.img_url} alt={recipeDetails.name} className="w-full h-full object-cover" />
+      </div>
       <h2>{recipeDetails.name}</h2>
       <p>{recipeDetails.description}</p>
       <h3>Portionen</h3>

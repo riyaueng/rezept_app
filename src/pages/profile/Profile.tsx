@@ -3,6 +3,7 @@ import { mainContext, type mainContextProps } from "../../context/MainProvider"
 import supabase from "../../utils/supabase"
 import { Link } from "react-router"
 import { uploadProfileImg } from "../../functions/uploadProfileImg"
+import CreateRecipe from "../../components/createRecipe/CreateRecipe"
 
 export default function Profile() {
   const { user, setUser } = useContext(mainContext) as mainContextProps
@@ -80,72 +81,78 @@ export default function Profile() {
   }
 
   return (
-    <section className="">
-      <h2>Willkommen {user?.username}</h2>
+    <>
+      <section className="">
+        <h2>Willkommen {user?.username}</h2>
 
-      <div className="">
-        {user ? (
-          <div className="">
+        <div className="">
+          {user ? (
             <div className="">
-              <img src={user.img_url} alt="Profile" />
-            </div>
+              <div className="w-45 h-45 flex items-center justify-center overflow-hidden relative">
+                <img src={user.img_url} alt="Profile" className="w-full h-full object-cover" />
+              </div>
 
-            <div className="">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files) {
-                    setprofileImg(e.target.files[0])
-                  }
-                }}
-                className=""
-              />
-              {profileImg && (
-                <button onClick={handleUploadImg} className="">
-                  Upload Photo
-                </button>
-              )}
-            </div>
-
-            <div onDoubleClick={handleDoubleClick} className="">
-              <p className="">Profilename</p>
-              {editing ? (
+              <div className="">
                 <input
-                  type="text"
-                  placeholder="Change your username"
-                  value={newUsername}
-                  onChange={(e) => setNewUsername(e.target.value)}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setprofileImg(e.target.files[0])
+                    }
+                  }}
                   className=""
                 />
-              ) : (
-                <p className="">{user.username}</p>
+                {profileImg && (
+                  <button onClick={handleUploadImg} className="">
+                    Upload Photo
+                  </button>
+                )}
+              </div>
+
+              <div onDoubleClick={handleDoubleClick} className="">
+                <p className="">Profilename</p>
+                {editing ? (
+                  <input
+                    type="text"
+                    placeholder="Change your username"
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    className=""
+                  />
+                ) : (
+                  <p className="">{user.username}</p>
+                )}
+              </div>
+
+              <div className="">
+                <p className="">
+                  Vorname: <span className="">{user.firstname}</span>
+                </p>
+                <p className="">
+                  Nachname: <span className="">{user.lastname}</span>
+                </p>
+              </div>
+
+              {editing && (
+                <button onClick={handleSave} className="">
+                  Save
+                </button>
               )}
+
+              <Link to="/" className="">
+                Zurück zur Startseite
+              </Link>
             </div>
+          ) : (
+            <p className="">Profile wurde nicht gefunden.</p>
+          )}
+        </div>
+      </section>
 
-            <div className="">
-              <p className="">
-                Vorname: <span className="">{user.firstname}</span>
-              </p>
-              <p className="">
-                Nachname: <span className="">{user.lastname}</span>
-              </p>
-            </div>
-
-            {editing && (
-              <button onClick={handleSave} className="">
-                Save
-              </button>
-            )}
-
-            <Link to="/" className="">
-              Zurück zur Startseite
-            </Link>
-          </div>
-        ) : (
-          <p className="">Profile wurde nicht gefunden.</p>
-        )}
-      </div>
-    </section>
+      <section>
+        <CreateRecipe />
+      </section>
+    </>
   )
 }

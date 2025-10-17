@@ -1,5 +1,4 @@
 import { useContext } from "react"
-import "./ListRecipe.css"
 import { mainContext, type mainContextProps } from "../../context/MainProvider"
 import type { IRecipe } from "../../interfaces/IRecipe"
 import CardRecipe from "../cardRecipe/CardRecipe"
