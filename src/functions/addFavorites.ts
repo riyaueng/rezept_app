@@ -31,19 +31,25 @@ export async function addFavorites(userId: string | undefined, recipeId: string)
   console.log(recipe)
 
   const recipeExits = recipe?.[0]
-  console.log(recipeExits)
 
-  // ? --------- Neue Rezepte hinzufügen ---------
-
-  const { error: insertError } = await supabase.from("favorite_recipes").insert({
-    favorites_id: favoritesId,
-    recipe_id: recipeId,
-  })
-  if (insertError) {
-    console.error("Fehler beim Hinzufügen deiner Rezepte.", insertError)
+  if (recipeExits) {
+    console.log(recipeExits)
+    return null
   } else {
-    console.log("Rezept wurde zu deinen Favoriten hinzugefügt.")
+    // ? --------- Neue Rezepte hinzufügen ---------
+
+    const { error: insertError } = await supabase.from("favorite_recipes").insert({
+      favorites_id: favoritesId,
+      recipe_id: recipeId,
+    })
+    if (insertError) {
+      console.error("Fehler beim Hinzufügen deiner Rezepte.", insertError)
+    } else {
+      console.log("Rezept wurde zu deinen Favoriten hinzugefügt.")
+    }
   }
+
+  console.log(recipeExits)
 
   // ? --------- Anzahl der Rezepte aktualisieren ---------
 }

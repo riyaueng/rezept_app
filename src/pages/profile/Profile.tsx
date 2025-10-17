@@ -2,11 +2,13 @@ import { useContext, useEffect, useState } from "react"
 import { mainContext, type mainContextProps } from "../../context/MainProvider"
 import supabase from "../../utils/supabase"
 import { Link } from "react-router"
+import { uploadProfileImg } from "../../functions/uploadProfileImg"
 
 export default function Profile() {
   const { user, setUser } = useContext(mainContext) as mainContextProps
   const [editing, setEditing] = useState<boolean>(false)
   const [newUsername, setNewUsername] = useState<string>("")
+  const [profileImg, setprofileImg] = useState<File | null>(null)
 
   // ? ------- Session und User im Browser prüfen --------
 
@@ -57,13 +59,55 @@ export default function Profile() {
     }
   }
 
+  // ? ------- Foto hochladen und speichern --------
+
+  async function handleUploadImg() {
+    if (!profileImg || !user) return null
+
+    try {
+      const imgUrl = await uploadProfileImg(profileImg)
+
+      if (imgUrl) {
+        setUser((prev) => (prev ? { ...prev, img_url: imgUrl } : prev))
+        const { data, error } = await supabase.from("profiles").update({ img_url: imgUrl }).eq("id", user.id)
+        console.log(data)
+        console.log(error)
+      }
+      return imgUrl
+    } catch (error) {
+      console.error("Fehler beim Upload des Fotos.", error)
+    }
+  }
+
   return (
-    <section className="section_profile">
+    <section className="">
       <h2>Willkommen {user?.username}</h2>
 
       <div className="">
         {user ? (
           <div className="">
+            <div className="">
+              <img src={user.img_url} alt="Profile" />
+            </div>
+
+            <div className="">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setprofileImg(e.target.files[0])
+                  }
+                }}
+                className=""
+              />
+              {profileImg && (
+                <button onClick={handleUploadImg} className="">
+                  Upload Photo
+                </button>
+              )}
+            </div>
+
             <div onDoubleClick={handleDoubleClick} className="">
               <p className="">Profilename</p>
               {editing ? (

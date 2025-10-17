@@ -1,42 +1,57 @@
 import { Link } from "react-router"
-import "./CardRecipe"
-import type { IFavorites } from "../../interfaces/IFavorite"
-import type { IRecipe } from "../../interfaces/IRecipe"
-import { addFavorites } from "../../functions/addFavorites"
 import { useContext } from "react"
 import { mainContext } from "../../context/MainProvider"
+import { addFavorites } from "../../functions/addFavorites"
+import type { IRecipe } from "../../interfaces/IRecipe"
+import type { IFavorites } from "../../interfaces/IFavorite"
 
 interface CardRecipeProps {
   recipe: IRecipe
   name: string
   desc: string
   link?: string
-  favorites?: IFavorites
+  img: string
+  category?: string
   onClick?: () => void | Promise<void>
 }
 
 export default function CardRecipe(props: CardRecipeProps) {
-  const { user } = useContext(mainContext)
+  const { user, favorites, setFavorites } = useContext(mainContext)
+
+  // Prüfen, ob das Rezept bereits favorisiert ist
+  const isFavorited = Array.isArray(favorites) ? favorites.some((fav) => fav.recipes?.id === props.recipe.id) : false
 
   const handleToFavorites = async () => {
     if (!user) {
-      console.error("Dein Profil wurde nicht gefunden")
-    } else {
-      await addFavorites(user?.id, props.recipe.id)
+      console.error("Kein Benutzer angemeldet")
+      return
+    }
+
+    try {
+      await addFavorites(user.id, props.recipe.id)
+
+      // Optional: Lokal aktualisieren, damit sofort das Herz aktualisiert wird
+      if (isFavorited) {
+        // Entferne aus Favoriten
+        setFavorites((prev: IFavorites[]) => prev.filter((fav) => fav.recipes?.id !== props.recipe.id))
+      } else {
+        // Füge zu Favoriten hinzu
+        setFavorites((prev: IFavorites[]) => [...(Array.isArray(prev) ? prev : []), { recipes: props.recipe }])
+      }
+    } catch (err) {
+      console.error("Fehler beim Hinzufügen/Entfernen der Favoriten:", err)
     }
   }
 
   return (
-    <div>
+    <div className="card">
+      <img src={props.recipe.img_url} alt={props.name} />
       <h3>{props.name}</h3>
+      <p>{props.category}</p>
       <p>{props.desc}</p>
-      {props.favorites ? (
-        <button onClick={props.onClick}>Entfernen</button>
-      ) : (
-        <>
-          <button onClick={handleToFavorites}>♡</button>
-        </>
-      )}
+
+      <button onClick={handleToFavorites}>{isFavorited ? "❤️" : "♡"}</button>
+
       <Link to={`/rezepte/${props.link}`}>Zum Rezept</Link>
     </div>
   )

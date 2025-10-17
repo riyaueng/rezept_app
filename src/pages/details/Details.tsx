@@ -35,7 +35,7 @@ export default function Details() {
 
   return (
     <section className="section_details">
-      <img src="#" alt="" />
+      <img src={recipeDetails.img_url} alt={recipeDetails.name} />
       <h2>{recipeDetails.name}</h2>
       <p>{recipeDetails.description}</p>
       <h3>Portionen</h3>

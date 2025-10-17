@@ -10,7 +10,7 @@ import supabase from "../utils/supabase"
 export async function getRecipeAndCategory(): Promise<IRecipe[]> {
   const { data: recipes, error } = await supabase
     .from("recipes")
-    .select(`id, name, description, category:categories(name)`)
+    .select(`id, name, description, img_url, category:categories(name)`)
   if (error) {
     console.error(error)
   }
@@ -41,7 +41,7 @@ export async function getCategories(): Promise<ICategory[]> {
   return categories as unknown as ICategory[]
 }
 
-// ? --------- Kategoriename  anzeigen lassen ---------
+// ? --------- Kategoriename anzeigen lassen ---------
 
 export async function getCategoryName(categories: ICategory[], categoryId: string | undefined): Promise<string> {
   const category = categories.find((category) => category.id === categoryId)
@@ -71,7 +71,6 @@ export const getFavorites = async (userId: string | undefined): Promise<IFavorit
     .from("favorite_recipes")
     .select("id, recipes:recipe_id(*)")
     .eq("favorites_id", favorites?.id)
-  console.log(favRecipes)
 
   return favRecipes
 }

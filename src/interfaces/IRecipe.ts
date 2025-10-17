@@ -7,5 +7,6 @@ export interface IRecipe {
   servings?: number
   instructions: string
   category_id?: string
+  img_url: string
   // category: ICategory
 }

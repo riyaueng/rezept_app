@@ -3,9 +3,12 @@ import { mainContext } from "../../context/MainProvider"
 import type { IFavorites } from "../../interfaces/IFavorite"
 import Button from "../../components/button/Button"
 import ListFavRecipes from "../../components/listFavRecipes/ListFavRecipes"
+import type { IProfile } from "../../interfaces/IProfile"
 
 interface IFavoritesProps {
+  user: IProfile
   favorites: IFavorites[]
+  setFavorites: React.Dispatch<React.SetStateAction<IFavorites[] | unknown>>
 }
 
 export default function Favorites() {
@@ -18,13 +21,13 @@ export default function Favorites() {
       </section>
 
       <section className="section_favorites_list">
-        {favorites.length === 0 ? (
+        {favorites?.length !== 0 ? (
+          <ListFavRecipes favorites={favorites} />
+        ) : (
           <div className="">
             <p className="">Du hast noch keine Rezepte gespeichert.</p>
             <Button text="Jetzt stöbern" link="/rezepte" />
           </div>
-        ) : (
-          <ListFavRecipes />
         )}
       </section>
     </>
