@@ -33,7 +33,7 @@ export default function Profile() {
     fetchData()
   }, [])
 
-  // ? ------- Editieren und Speichern --------
+  // ? ------- Username editieren und speichern --------
 
   async function handleSave() {
     if (user && newUsername !== user.username) {

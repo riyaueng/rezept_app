@@ -1,75 +1,169 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 // import { Plus, Trash2 } from "lucide-react"
-import type { ICategory } from "../../interfaces/ICategory"
 import { mainContext, type mainContextProps } from "../../context/MainProvider"
+import type { IIngredient } from "../../interfaces/IIngredient"
+import supabase from "../../utils/supabase"
 
-interface Ingredient {
-  id: string
-  zutat: string
-  menge: string
-  einheit: string
-  info: string
-}
-
-interface RecipeFormData {
+interface IRecipeFormData {
   name: string
-  zutaten: Ingredient[]
+  ingredients: IIngredient[]
+  description: string
+  instruction: string
+  category_id: string
+  img_url: string
 }
 
 export default function RecipeForm() {
-  const { categories } = useContext(mainContext) as mainContextProps
-  const [formData, setFormData] = useState<RecipeFormData>({
+  const { categories, setCategories } = useContext(mainContext) as mainContextProps
+  const [formData, setFormData] = useState<IRecipeFormData>({
     name: "",
-    zutaten: [{ id: "1", zutat: "", menge: "", einheit: "", info: "" }],
+    description: "",
+    instruction: "",
+    category_id: "",
+    img_url: "",
+    ingredients: [
+      {
+        name: "",
+        quantity: 1,
+        unit: "",
+        additional_info: "",
+      },
+    ],
   })
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [message, setMessage] = useState("")
+  const [recipeImg, setRecipeImg] = useState<File | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string>("")
 
-  // const addIngredient = () => {
-  //   const newIngredient: Ingredient = {
-  //     id: Date.now().toString(),
-  //     zutat: "",
-  //     menge: "",
-  //     einheit: "",
-  //     info: "",
-  //   }
-  //   setFormData({
-  //     ...formData,
-  //     zutaten: [...formData.zutaten, newIngredient],
-  //   })
-  // }
+  // ? --------- Kategorien für das Formular rendern ----------
 
-  const removeIngredient = (id: string) => {
-    if (formData.zutaten.length > 1) {
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data, error } = await supabase.from("categories").select("id, name").order("name", { ascending: true })
+
+        if (error) throw error
+        if (data) {
+          setCategories(data)
+        }
+        if (categories.length > 0) {
+          setCategories(categories)
+        }
+      } catch (error) {
+        console.error("Fehler beim Laden der Kategorien:", error)
+      }
+    }
+
+    fetchCategories()
+  }, [])
+
+  // ? --------- Rezeptfoto hochladen und entfernen ----------
+
+  const handleUploadRecipeImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setRecipeImg(file)
+      // * ---- Vorschaubild erstellen ----
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const removeRecipeImg = () => {
+    setRecipeImg(null)
+    setPreviewUrl("")
+    setFormData({ ...formData, img_url: "" })
+  }
+
+  // ? --------- Zutaten-Optionen hinzufügen und entfernen ----------
+
+  const addIngredient = () => {
+    const newIngredient: IIngredient = {
+      name: "",
+      quantity: 1,
+      unit: "",
+      additional_info: "",
+    }
+    setFormData({
+      ...formData,
+      ingredients: [...formData.ingredients, newIngredient],
+    })
+  }
+
+  const removeIngredient = (index: number) => {
+    if (formData.ingredients.length > 1) {
       setFormData({
         ...formData,
-        zutaten: formData.zutaten.filter((z) => z.id !== id),
+        ingredients: formData.ingredients.filter((_, i) => i !== index),
       })
     }
   }
 
-  const updateIngredient = (id: string, field: keyof Ingredient, value: string) => {
+  const updateIngredient = (index: number, field: keyof IIngredient, value: string | number) => {
     setFormData({
       ...formData,
-      zutaten: formData.zutaten.map((z) => (z.id === id ? { ...z, [field]: value } : z)),
+      ingredients: formData.ingredients.map((ingredient, i) =>
+        i === index ? { ...ingredient, [field]: value } : ingredient
+      ),
     })
   }
+
+  // ? ------------ Neues Rezept-Daten an Supabase übergeben ------------
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
     setMessage("")
 
     try {
-      // Hier kommt deine Supabase-Integration
-      // Beispiel:
-      // const { data, error } = await supabase
-      //   .from('recipes')
-      //   .insert([{
-      //     name: formData.name,
-      //     zutaten: formData.zutaten
-      //   }]);
+      let imageUrl = ""
 
-      // if (error) throw error;
+      // * ---- Foto im Supabase Storage hochladen ----
+
+      if (recipeImg) {
+        const fileExt = recipeImg.name.split(".").pop()
+        const fileName = `${Date.now()}.${fileExt}`
+        const { error: uploadError } = await supabase.storage.from("recipes_img").upload(fileName, recipeImg)
+        if (uploadError) throw uploadError
+
+        // * ---- Foto-URL erstellen ----
+
+        const { data: urlData } = supabase.storage.from("recipes_img").getPublicUrl(fileName)
+
+        imageUrl = urlData.publicUrl
+      }
+
+      // * ----- Einzelnes Rezept in die Supabase Datentabelle hochladen -----
+
+      const { data: recipe, error: recipeError } = await supabase
+        .from("recipes")
+        .insert([
+          {
+            name: formData.name,
+            description: formData.description,
+            instructions: formData.instruction,
+            category_id: formData.category_id,
+            img_url: imageUrl,
+          },
+        ])
+        .select()
+        .single()
+
+      if (recipeError) throw recipeError
+
+      // * ---- Zutaten in die Supabase Datentabelle hochladen ----
+
+      const ingredientsWithRecipeId = formData.ingredients.map((ingredient) => ({
+        ...ingredient,
+        recipe_id: recipe.id,
+      }))
+
+      const { error: ingredientsError } = await supabase.from("ingredients").insert(ingredientsWithRecipeId)
+
+      if (ingredientsError) throw ingredientsError
 
       // Simuliere API-Call für Demo
       await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -78,8 +172,14 @@ export default function RecipeForm() {
       // Formular zurücksetzen
       setFormData({
         name: "",
-        zutaten: [{ id: Date.now().toString(), zutat: "", menge: "", einheit: "", info: "" }],
+        description: "",
+        instruction: "",
+        category_id: "",
+        img_url: "",
+        ingredients: [{ name: "", quantity: 0, unit: "", additional_info: "" }],
       })
+      setRecipeImg(null)
+      setPreviewUrl("")
     } catch (error) {
       setMessage("Fehler beim Speichern: " + (error as Error).message)
     } finally {
@@ -88,7 +188,7 @@ export default function RecipeForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 p-8">
+    <div className="min-h-screen ">
       <div className="max-w-3xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">Neues Rezept erstellen</h1>
@@ -109,15 +209,78 @@ export default function RecipeForm() {
               />
             </div>
 
+            {/* Kategorie */}
             <div>
-              <select required className="">
-                <option value="">Kategorie</option>
-                {categories.map((category: ICategory) => (
-                  <option key={category.name} value={category.name}>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                Kategorie
+              </label>
+              <select
+                id="category"
+                value={formData.category_id}
+                onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white">
+                <option value="">Kategorie auswählen...</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
                     {category.name}
                   </option>
                 ))}
               </select>
+            </div>
+
+            {/* Beschreibung */}
+            <div>
+              <label htmlFor="beschreibung" className="block text-sm font-medium text-gray-700 mb-2">
+                Beschreibung
+              </label>
+              <textarea
+                id="beschreibung"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                placeholder="Kurze Beschreibung des Rezepts..."
+                rows={3}
+              />
+            </div>
+
+            {/* Foto hochladen */}
+            <div>
+              <label htmlFor="photo" className="block text-sm font-medium text-gray-700 mb-2">
+                Rezeptfoto
+              </label>
+              <div className="space-y-3">
+                {previewUrl ? (
+                  <div className="relative">
+                    <img
+                      src={previewUrl}
+                      alt="Vorschau"
+                      className="w-full h-64 object-cover rounded-lg border border-gray-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={removeRecipeImg}
+                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                      title="Bild entfernen">
+                      {/* <Trash2 size={18} /> */}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-orange-500 transition-colors">
+                    <input
+                      id="photo"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleUploadRecipeImg}
+                      className="hidden"
+                    />
+                    <label htmlFor="photo" className="cursor-pointer flex flex-col items-center">
+                      {/* <Plus size={40} className="text-gray-400 mb-2" /> */}
+                      <span className="text-sm text-gray-600">Klicken Sie hier, um ein Foto hochzuladen</span>
+                      <span className="text-xs text-gray-400 mt-1">PNG, JPG bis zu 10MB</span>
+                    </label>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Zutaten */}
@@ -126,7 +289,7 @@ export default function RecipeForm() {
                 <label className="block text-sm font-medium text-gray-700">Zutaten</label>
                 <button
                   type="button"
-                  // onClick={addIngredient}
+                  onClick={addIngredient}
                   className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
                   {/* <Plus size={18} /> */}
                   Zutat hinzufügen
@@ -134,33 +297,33 @@ export default function RecipeForm() {
               </div>
 
               <div className="space-y-4">
-                {formData.zutaten.map((ingredient, index) => (
-                  <div key={ingredient.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                {formData.ingredients.map((ingredient, index) => (
+                  <div key={index} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <div className="flex items-start gap-3">
                       <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div className="md:col-span-2">
                           <input
                             type="text"
-                            value={ingredient.zutat}
-                            onChange={(e) => updateIngredient(ingredient.id, "zutat", e.target.value)}
+                            value={ingredient.name}
+                            onChange={(e) => updateIngredient(index, "name", e.target.value)}
                             placeholder="Zutat"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                           />
                         </div>
                         <div>
                           <input
-                            type="text"
-                            value={ingredient.menge}
-                            onChange={(e) => updateIngredient(ingredient.id, "menge", e.target.value)}
-                            placeholder="Menge"
+                            type="number"
+                            value={ingredient.quantity}
+                            onChange={(e) => updateIngredient(index, "quantity", parseFloat(e.target.value))}
+                            placeholder="Portion"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                           />
                         </div>
                         <div>
                           <input
                             type="text"
-                            value={ingredient.einheit}
-                            onChange={(e) => updateIngredient(ingredient.id, "einheit", e.target.value)}
+                            value={ingredient.unit}
+                            onChange={(e) => updateIngredient(index, "unit", e.target.value)}
                             placeholder="Einheit (z.B. g, ml, Stück)"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                           />
@@ -168,18 +331,18 @@ export default function RecipeForm() {
                         <div className="md:col-span-2">
                           <input
                             type="text"
-                            value={ingredient.info}
-                            onChange={(e) => updateIngredient(ingredient.id, "info", e.target.value)}
+                            value={ingredient.additional_info || ""}
+                            onChange={(e) => updateIngredient(index, "additional_info", e.target.value)}
                             placeholder="Optionale Info (z.B. gewürfelt, gehackt)"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                           />
                         </div>
                       </div>
 
-                      {formData.zutaten.length > 1 && (
+                      {formData.ingredients.length > 1 && (
                         <button
                           type="button"
-                          onClick={() => removeIngredient(ingredient.id)}
+                          onClick={() => removeIngredient(index)}
                           className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                           title="Zutat entfernen">
                           {/* <Trash2 size={20} /> */}
@@ -190,6 +353,21 @@ export default function RecipeForm() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Anleitung */}
+            <div>
+              <label htmlFor="anleitung" className="block text-sm font-medium text-gray-700 mb-2">
+                Anleitung
+              </label>
+              <textarea
+                id="anleitung"
+                value={formData.instruction}
+                onChange={(e) => setFormData({ ...formData, instruction: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                placeholder="Schritt-für-Schritt Anleitung..."
+                rows={6}
+              />
             </div>
 
             {/* Submit Button */}
