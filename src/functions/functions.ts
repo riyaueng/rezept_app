@@ -33,6 +33,7 @@ export async function getCategories(): Promise<ICategory[]> {
   const { data: categories, error } = await supabase.from("categories").select(`
     id,
     name,
+    icon,
     recipe:recipes(name)
     `)
   if (error) {

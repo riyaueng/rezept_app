@@ -3,7 +3,6 @@ import { mainContext, type mainContextProps } from "../../context/MainProvider"
 import supabase from "../../utils/supabase"
 import { Link } from "react-router"
 import { uploadProfileImg } from "../../functions/uploadProfileImg"
-import CreateRecipe from "../../components/createRecipe/CreateRecipe"
 
 export default function Profile() {
   const { user, setUser } = useContext(mainContext) as mainContextProps
@@ -82,17 +81,17 @@ export default function Profile() {
 
   return (
     <>
-      <section className="">
-        <h2>Willkommen {user?.username}</h2>
+      <section className="p-20">
+        <h2 className="mb-10">Willkommen {user?.username}</h2>
 
-        <div className="">
+        <div className="mb-16">
           {user ? (
-            <div className="">
-              <div className="w-45 h-45 flex items-center justify-center overflow-hidden relative">
+            <div className="mb-5">
+              <div className="w-45 h-45 flex items-center justify-center overflow-hidden relative rounded-full mb-5">
                 <img src={user.img_url} alt="Profile" className="w-full h-full object-cover" />
               </div>
 
-              <div className="">
+              <div className="mb-8">
                 <input
                   type="file"
                   accept="image/*"
@@ -101,7 +100,7 @@ export default function Profile() {
                       setprofileImg(e.target.files[0])
                     }
                   }}
-                  className=""
+                  className="mb-5"
                 />
                 {profileImg && (
                   <button onClick={handleUploadImg} className="">
@@ -111,7 +110,7 @@ export default function Profile() {
               </div>
 
               <div onDoubleClick={handleDoubleClick} className="">
-                <p className="">Profilename</p>
+                <p className="">Profilename: </p>
                 {editing ? (
                   <input
                     type="text"
@@ -148,10 +147,6 @@ export default function Profile() {
             <p className="">Profile wurde nicht gefunden.</p>
           )}
         </div>
-      </section>
-
-      <section>
-        <CreateRecipe />
       </section>
     </>
   )

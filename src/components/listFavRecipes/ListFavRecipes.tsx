@@ -22,7 +22,7 @@ export default function ListFavRecipes({ favorites }: IFavRecipes) {
   }
 
   return (
-    <div>
+    <section className="flex flex-wrap justify-between gap-12">
       {favorites.map((favRecipe: IFavorites) => (
         <div key={favRecipe.id}>
           <CardRecipe
@@ -31,9 +31,10 @@ export default function ListFavRecipes({ favorites }: IFavRecipes) {
             onClick={() => removeRecipe(favRecipe.id)}
             link={`${favRecipe.recipes.id}`}
             recipe={favRecipe.recipes}
+            img={favRecipe.recipes.img_url}
           />
         </div>
       ))}
-    </div>
+    </section>
   )
 }

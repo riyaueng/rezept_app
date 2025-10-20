@@ -8,19 +8,21 @@ export default function ListRecipe() {
 
   return (
     <>
-      {recipes.map((recipe: IRecipe) => {
-        return (
-          <div key={recipe.id}>
-            <CardRecipe
-              name={recipe.name}
-              desc={`${recipe.description}`}
-              link={`${recipe.id}`}
-              recipe={recipe}
-              img={recipe.img_url}
-            />
-          </div>
-        )
-      })}
+      <section className="flex flex-wrap justify-between gap-12">
+        {recipes.map((recipe: IRecipe) => {
+          return (
+            <div key={recipe.id}>
+              <CardRecipe
+                name={recipe.name}
+                desc={`${recipe.description}`}
+                link={`${recipe.id}`}
+                recipe={recipe}
+                img={recipe.img_url}
+              />
+            </div>
+          )
+        })}
+      </section>
     </>
   )
 }

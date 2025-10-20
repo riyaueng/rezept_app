@@ -49,43 +49,78 @@ export default function SignUp() {
 
   return (
     <section className="section_signup">
-      <h2>Erstelle dir ein Profil</h2>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit autem vero error nam. Odio eaque laudantium,
-        quidem voluptate voluptatum porro?
-      </p>
+      <div className="min-h-screen m-10">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <h2 className="mb-5">Erstelle dir ein Profil</h2>
+            <p className="mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit autem vero error nam.</p>
 
-      <form onSubmit={handleSignUp} className="">
-        <div>
-          <input type="text" name="firstname" placeholder="Vorname" required className="" />
+            <form onSubmit={handleSignUp} className="">
+              <div className="mb-4">
+                <input
+                  type="text"
+                  name="firstname"
+                  placeholder="Vorname"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="mb-4">
+                <input
+                  type="text"
+                  name="lastname"
+                  placeholder="Nachname"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="mb-4">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Profilname"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="mb-4">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
+              <div className="mb-5">
+                <input
+                  type="current_password"
+                  name="password"
+                  placeholder="Passwort"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="flex-1 px-6 py-3 bg-orange-primary text-white font-medium rounded-lg hover:bg-orange-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors mb-5">
+                Sign Up
+              </button>
+
+              <p className="">
+                Du hast schon ein Profil? Hier geht es zum{" "}
+                <Link to="/login" className="text-blue-secondary underline">
+                  Login
+                </Link>
+              </p>
+            </form>
+          </div>
         </div>
-
-        <div>
-          <input type="text" name="lastname" placeholder="Nachname" required className="" />
-        </div>
-
-        <div>
-          <input type="text" name="username" placeholder="Profilname" required className="" />
-        </div>
-
-        <div>
-          <input type="email" name="email" placeholder="Email" required className="" />
-        </div>
-        <div>
-          <input type="current_password" name="password" placeholder="Passwort" required className="" />
-        </div>
-
-        <button type="submit" className="">
-          Sign Up
-        </button>
-
-        <p className="">
-          Du hast schon ein Profil? Hier geht es zum{" "}
-          <Link to="/login" className="">
-            Login
-          </Link>
-        </p>
-      </form>
+      </div>
     </section>
   )
 }

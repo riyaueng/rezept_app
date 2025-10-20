@@ -1,17 +1,14 @@
-import Nav from "../nav/Nav"
+import { NavLink } from "react-router"
+import Nav from "../nav/nav"
 
 export default function Header() {
   return (
-    <header>
-      <section className="section_navbar">
-        <img src="#" alt="" />
+    <header className="mx-20">
+      <section className="py-3.5 flex gap-18 items-center">
+        <NavLink to="/" className={" "}>
+          <img src="/public/img/rezeptwelt_logo.svg" alt="Rezeptwelt Logo" className="h-11" />
+        </NavLink>
         <Nav />
-      </section>
-
-      <section className="section_hero">
-        <h1>
-          Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch.
-        </h1>
       </section>
     </header>
   )

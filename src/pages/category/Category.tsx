@@ -28,15 +28,22 @@ export default function Category() {
   return (
     <>
       <section className="section_categories">
-        <h2>{categoryName}</h2>
+        <h1 className="mb-8">{categoryName}</h1>
+        <h2 className="my-5 text-grey-fonts">Weitere Kategorien</h2>
         <NavCategories />
       </section>
 
-      <section className="section_category_list">
+      <section className="flex flex-wrap justify-between gap-8">
         {recipes.map((recipe: IRecipe) => {
           return (
             <div key={recipe.id}>
-              <CardRecipe name={recipe.name} desc={recipe.description} link={`${recipe.id}`} recipe={recipe} />
+              <CardRecipe
+                name={recipe.name}
+                desc={recipe.description}
+                link={`${recipe.id}`}
+                recipe={recipe}
+                img={recipe.img_url}
+              />
             </div>
           )
         })}

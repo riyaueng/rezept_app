@@ -17,10 +17,10 @@ export default function Favorites() {
   return (
     <>
       <section className="section_intro">
-        <h2>Deine Lieblingsrezepte</h2>
+        <h2 className="my-10 text-grey-fonts">Deine Lieblingsrezepte</h2>
       </section>
 
-      <section className="section_favorites_list">
+      <section className="mb-30">
         {favorites?.length !== 0 ? (
           <ListFavRecipes favorites={favorites} />
         ) : (

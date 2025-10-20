@@ -1,51 +1,93 @@
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("/fonts/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Medium";
+  src: url("/fonts/Poppins-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-SemiBold";
+  src: url("/fonts/Poppins-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Bold";
+  src: url("/fonts/Poppins-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Calistoga-Regular";
+  src: url("/public/fonts/Calistoga-Regular.ttf");
+}
+
 @import "tailwindcss";
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #45474b;
+@theme {
+  --color-orange-primary: #ff8c68;
+  --color-orange-light: #f5ac9a;
+  --color-grey-midtone: #e6dce5;
+  --color-blue-secondary: #94b3e6;
+  --color-blue-midtone: #d2e1fc;
+  --color-blue-light: #e3ecff;
+  --color-blue-white: #f6f8ff;
+  --color-pastel-white: #fff6ea;
+  --color-grey-fonts: #474259;
+  --color-blue-dark: #1f1842;
+
+  --font-headline: "Calistoga-Regular", serif;
+  --font-base: "Poppins-Regular", sans-serif;
+  --font-buttons: "Poppins-Medium", sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  * {
+    @apply font-base;
+    @apply text-blue-dark;
+    @apply box-border;
+    @apply m-0;
+    @apply p-0;
+  }
 
-a {
-  font-weight: 500;
-  color: #ffdb63;
-  text-decoration: none;
-}
+  html {
+    @apply bg-blue-white;
+  }
 
-body {
-  margin: 0;
-  display: flex;
-  min-width: 320px;
-  min-height: 100vh;
-}
+  body {
+    @apply m-0;
+    @apply flex;
+    @apply min-w-80;
+    @apply min-h-full;
+    @apply w-full;
+  }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-headline;
+    @apply text-orange-primary;
+  }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #ffdb63;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #ffdb63;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  h1 {
+    @apply text-5xl;
+  }
+
+  h2 {
+    @apply text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  a {
+    @apply no-underline;
+  }
+
+  ul {
+    @apply list-none;
+  }
 }
