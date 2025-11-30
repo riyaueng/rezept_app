@@ -81,7 +81,7 @@ export default function Profile() {
 
   return (
     <>
-      <section className="p-20">
+      <section className="mx-30 mt-10">
         <h2 className="mb-10">Willkommen {user?.username}</h2>
 
         <div className="mb-16">
@@ -100,7 +100,7 @@ export default function Profile() {
                       setprofileImg(e.target.files[0])
                     }
                   }}
-                  className="mb-5"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 />
                 {profileImg && (
                   <button onClick={handleUploadImg} className="">

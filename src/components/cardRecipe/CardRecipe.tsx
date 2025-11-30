@@ -44,8 +44,8 @@ export default function CardRecipe(props: CardRecipeProps) {
   }
 
   return (
-    <div className="w-94 h-122 mb-5 bg-pastel-white flex flex-col justify-between rounded-tl-none rounded-bl-4xl rounded-br-none rounded-tr-4xl shadow-[1px_7px_15px_-2px_#d2e1fc]">
-      <div className="w-94 h-60 flex items-center justify-center overflow-hidden relative rounded-tr-4xl">
+    <div className="w-94 h-122 mb-3 bg-pastel-white flex flex-col justify-between rounded-4xl rounded-br-none shadow-[1px_7px_15px_-2px_#d2e1fc]">
+      <div className="w-94 h-60 flex items-center justify-center overflow-hidden relative rounded-tr-4xl ">
         <img src={props.recipe.img_url} alt={props.name} className="w-full h-full object-cover" />
         <button
           onClick={handleToFavorites}

@@ -1,7 +1,7 @@
 export default function About() {
   return (
     <>
-      <section className="section_intro">
+      <section className="mx-30 mb-20">
         <h2>Hello World</h2>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Est eum tempore rerum unde sed neque, at totam nemo

@@ -4,6 +4,7 @@ interface ButtonProps {
   text: string
   link: string
   style?: string
+  type?: string
   onClick?: () => void | Promise<void>
 }
 
@@ -30,9 +31,10 @@ button:focus-visible {
 export default function Button(props: ButtonProps) {
   return (
     <Link
+      type={props.type}
       to={props.link}
       onClick={props.onClick}
-      className={`${props.style} bg-orange-primary text-blue-white font-buttons text-sm tracking-wider rounded-tl-none rounded-bl-full rounded-br-full rounded-tr-full border-solid border-[1px] border-transparent py-3 px-6`}>
+      className={`${props.style} bg-orange-primary text-blue-white font-buttons text-sm tracking-wider rounded-tl-none rounded-full border-solid border-[1px] border-transparent py-3 px-6`}>
       {props.text}
     </Link>
   )

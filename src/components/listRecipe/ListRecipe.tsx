@@ -8,7 +8,7 @@ export default function ListRecipe() {
 
   return (
     <>
-      <section className="flex flex-wrap justify-between gap-12">
+      <section className="flex flex-wrap justify-start gap-8">
         {recipes.map((recipe: IRecipe) => {
           return (
             <div key={recipe.id}>

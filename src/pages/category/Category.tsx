@@ -27,13 +27,13 @@ export default function Category() {
 
   return (
     <>
-      <section className="section_categories">
+      <section className="mx-30 mb-10">
         <h1 className="mb-8">{categoryName}</h1>
         <h2 className="my-5 text-grey-fonts">Weitere Kategorien</h2>
         <NavCategories />
       </section>
 
-      <section className="flex flex-wrap justify-between gap-8">
+      <section className="flex flex-wrap justify-start gap-8 mx-30 mb-20">
         {recipes.map((recipe: IRecipe) => {
           return (
             <div key={recipe.id}>

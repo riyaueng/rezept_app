@@ -126,18 +126,18 @@ export default function RecipeForm() {
     try {
       // * ---- Foto im Supabase Storage hochladen ----
 
-      // if (recipeImg) {
-      const fileExt = recipeImg?.name.split(".").pop()
-      const fileName = `${Date.now()}.${fileExt}`
-      const { error: uploadError } = await supabase.storage.from("recipes_img").upload(fileName, recipeImg)
-      if (uploadError) throw uploadError
+      if (recipeImg) {
+        const fileExt = recipeImg.name.split(".").pop()
+        const fileName = `${Date.now()}.${fileExt}`
+        const { error: uploadError } = await supabase.storage.from("recipes_img").upload(fileName, recipeImg)
+        if (uploadError) throw uploadError
 
-      // * ---- Foto-URL erstellen ----
+        // * ---- Foto-URL erstellen ----
 
-      const { data: urlData } = supabase.storage.from("recipes_img").getPublicUrl(fileName)
-      console.log(urlData)
-      setImgUrl(urlData.publicUrl)
-      // }
+        const { data: urlData } = supabase.storage.from("recipes_img").getPublicUrl(fileName)
+        console.log(urlData)
+        setImgUrl(urlData.publicUrl)
+      }
 
       // * ----- Einzelnes Rezept in die Supabase Datentabelle hochladen -----
 
@@ -195,9 +195,9 @@ export default function RecipeForm() {
   console.log(formData)
 
   return (
-    <div className="min-h-screen m-10">
+    <div className="min-h-screen my-20 mx-30">
       <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-[1px_7px_15px_-2px_#d2e1fc] p-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">Neues Rezept erstellen</h1>
 
           <div className="space-y-6">
@@ -310,7 +310,7 @@ export default function RecipeForm() {
                 <button
                   type="button"
                   onClick={addIngredient}
-                  className="flex items-center gap-2 px-4 py-2 bg-orange-primary text-white rounded-lg hover:bg-orange-500 transition-colors">
+                  className="flex  hover:bg-blue-400 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors bg-blue-secondary text-blue-white font-buttons  tracking-wider rounded-full rounded-br-none border-solid border-[1px] border-transparent py-3 px-10">
                   {/* <Plus size={18} /> */}
                   Zutat hinzufügen
                 </button>
@@ -391,12 +391,12 @@ export default function RecipeForm() {
             </div>
 
             {/* Submit Button */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center gap-4">
               <button
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="flex-1 px-6 py-3 bg-orange-primary text-white font-medium rounded-lg hover:bg-orange-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+                className=" hover:bg-orange-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors bg-orange-primary text-blue-white font-buttons  tracking-wider rounded-tl-none rounded-bl-full rounded-br-full rounded-tr-full border-solid border-[1px] border-transparent py-3 px-25">
                 {isSubmitting ? "Wird gespeichert..." : "Rezept speichern"}
               </button>
             </div>

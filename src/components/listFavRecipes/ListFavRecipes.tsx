@@ -22,7 +22,7 @@ export default function ListFavRecipes({ favorites }: IFavRecipes) {
   }
 
   return (
-    <section className="flex flex-wrap justify-between gap-12">
+    <section className="flex flex-wrap justify-start gap-8">
       {favorites.map((favRecipe: IFavorites) => (
         <div key={favRecipe.id}>
           <CardRecipe

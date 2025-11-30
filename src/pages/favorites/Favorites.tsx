@@ -16,17 +16,19 @@ export default function Favorites() {
 
   return (
     <>
-      <section className="section_intro">
+      <section className="mx-30">
         <h2 className="my-10 text-grey-fonts">Deine Lieblingsrezepte</h2>
       </section>
 
-      <section className="mb-30">
+      <section className="mx-30 mb-20">
         {favorites?.length !== 0 ? (
           <ListFavRecipes favorites={favorites} />
         ) : (
-          <div className="">
+          <div className="min-h-screen mt-10">
             <p className="">Du hast noch keine Rezepte gespeichert.</p>
-            <Button text="Jetzt stöbern" link="/rezepte" />
+            <div className="my-10">
+              <Button text="Jetzt stöbern" link="/rezepte" />
+            </div>
           </div>
         )}
       </section>

@@ -48,12 +48,12 @@ export default function SignUp() {
   }
 
   return (
-    <section className="section_signup">
+    <section className="px-30">
       <div className="min-h-screen m-10">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="bg-white rounded-2xl shadow-[1px_7px_15px_-2px_#d2e1fc] p-8">
             <h2 className="mb-5">Erstelle dir ein Profil</h2>
-            <p className="mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit autem vero error nam.</p>
+            <p className="mb-5">Sammle tolle leckere Rezepte und lade deine eigenen Kreationen hoch!</p>
 
             <form onSubmit={handleSignUp} className="">
               <div className="mb-4">
@@ -105,13 +105,15 @@ export default function SignUp() {
                 />
               </div>
 
-              <button
-                type="submit"
-                className="flex-1 px-6 py-3 bg-orange-primary text-white font-medium rounded-lg hover:bg-orange-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors mb-5">
-                Sign Up
-              </button>
+              <div className="my-8">
+                <button
+                  type="submit"
+                  className="flex-1 font-medium rounded-lg hover:bg-orange-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors bg-orange-primary text-blue-white text-lg font-buttons  tracking-wider rounded-tl-none rounded-bl-full rounded-br-full rounded-tr-full border-solid border-[1px] border-transparent py-3 px-14">
+                  Sign Up
+                </button>
+              </div>
 
-              <p className="">
+              <p className="my-8">
                 Du hast schon ein Profil? Hier geht es zum{" "}
                 <Link to="/login" className="text-blue-secondary underline">
                   Login

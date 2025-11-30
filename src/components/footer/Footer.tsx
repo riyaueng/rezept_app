@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-blue-midtone h-20 py-3.5 px-7 flex gap-18 items-center justify-between">
+    <footer className="bg-blue-midtone h-20 py-3.5 flex gap-18 items-center justify-between px-30">
       <div>
         <img src="/public/img/rezeptwelt_logo.svg" alt="Rezetwelt Logo" className="h-10" />
       </div>
